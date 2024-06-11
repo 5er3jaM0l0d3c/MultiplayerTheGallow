@@ -5,8 +5,15 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Client"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="TheGallow" Height="450" Width="800" ResizeMode="NoResize">
     <Grid>
 
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="50"/>
+        </Grid.RowDefinitions>
+        
+        <Frame Name="MainAreaFrame" NavigationUIVisibility="Hidden" JournalOwnership="OwnsJournal"/>
+        <Frame Name="LowerAreaFrame" Grid.Row="1" NavigationUIVisibility="Hidden" JournalOwnership="OwnsJournal"/>
     </Grid>
 </Window>

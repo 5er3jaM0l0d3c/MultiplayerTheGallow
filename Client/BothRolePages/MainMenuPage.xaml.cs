@@ -54,7 +54,7 @@ namespace Client.BothRolePages
         private async void CheckRole(Player.Roles role)
         {
             string Role = role.ToString();
-            var response = await client.GetAsync("http://26.16.166.250:7269/api/Main/CanTakeRole?role=" + Role);
+            var response = await client.GetAsync("http://localhost:5279/api/Main/CanTakeRole?role=" + Role);
             var result = await response.Content.ReadAsAsync<bool>();   
             if(role == Player.Roles.Maker)
             {
@@ -68,11 +68,11 @@ namespace Client.BothRolePages
             
         private async void BTN_MakeSecret(object sender, RoutedEventArgs e)
         {
-            var response = await client.GetAsync("http://26.16.166.250:7269/api/Main/CanTakeRole?role=Maker");
+            var response = await client.GetAsync("http://localhost:5279/api/Main/CanTakeRole?role=Maker");
             var result = await response.Content.ReadAsAsync<bool>();
             if(result)
             {
-                await client.GetAsync("http://26.16.166.250:7269/api/Main/CreatePlayer?role=Maker");
+                await client.GetAsync("http://localhost:5279/api/Main/CreatePlayer?role=Maker");
                 timerr.Stop();
 
                 Manager.MainAreaFrame.Navigate(new MakeSecretPage());
@@ -87,11 +87,11 @@ namespace Client.BothRolePages
 
         private async void BTN_DestroySecret(object sender, RoutedEventArgs e)
         {
-            var response = await client.GetAsync("http://26.16.166.250:7269/api/Main/CanTakeRole?role=Destroyer");
+            var response = await client.GetAsync("http://localhost:5279/api/Main/CanTakeRole?role=Destroyer");
             var result = await response.Content.ReadAsAsync<bool>();
             if (result)
             {
-                response = await client.GetAsync("http://26.16.166.250:7269/api/Main/CreatePlayer?role=Destroyer");
+                response = await client.GetAsync("http://localhost:5279/api/Main/CreatePlayer?role=Destroyer");
                 timerr.Stop();
                 Manager.MainAreaFrame.Navigate(new WaitingPage(Player.Roles.Destroyer));
             }

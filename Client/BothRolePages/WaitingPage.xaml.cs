@@ -45,7 +45,7 @@ namespace Client.BothRolePages
 
         private async void TMR_Waiting(object? sender, EventArgs e)
         {
-            var response = await client.GetAsync("http://26.16.166.250:7269/api/Main/IsWaitingPlayer?role=" + player.ToString());
+            var response = await client.GetAsync("http://localhost:5279/api/Main/IsWaitingPlayer?role=" + player.ToString());
             var result = await response.Content.ReadAsAsync<bool>();
 
             if (!result)

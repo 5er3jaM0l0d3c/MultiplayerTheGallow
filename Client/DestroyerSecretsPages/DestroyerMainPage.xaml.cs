@@ -47,7 +47,7 @@ namespace Client.DestroyerSecretsPages
 
         private async void GetNumOfMistakes()
         {
-            var response = await client.GetAsync("http://26.16.166.250:7269/api/Main/GetNumOfMistakes");
+            var response = await client.GetAsync("http://localhost:5279/api/Main/GetNumOfMistakes");
             numOfMistakes = Convert.ToInt32(await response.Content.ReadAsStringAsync());
             LBLNumOfMistakes.Content = numOfMistakes;
         }
@@ -97,7 +97,7 @@ namespace Client.DestroyerSecretsPages
         HttpClient client = Manager.client;
         private async void TakeWord()
         {
-            var response = await client.GetAsync("http://26.16.166.250:7269/api/Main/GetWord");
+            var response = await client.GetAsync("http://localhost:5279/api/Main/GetWord");
             Manager.SecretWord = await response.Content.ReadAsStringAsync();
             for (int i = 0; i < Manager.SecretWord.Length; i++)
             {
@@ -114,7 +114,7 @@ namespace Client.DestroyerSecretsPages
         private async void CheckLetter(string SecretWord)
         {
             var chr = TBXLetter.Text.FirstOrDefault();
-            await client.GetAsync("http://26.16.166.250:7269/api/Main/WriteLastLetter?letter=" + chr);
+            await client.GetAsync("http://localhost:5279/api/Main/WriteLastLetter?letter=" + chr);
                 
             if (chr.ToString() == LLetter || SecretWord.Contains(chr))
             {
@@ -156,7 +156,7 @@ namespace Client.DestroyerSecretsPages
 
             var jsonContent = JsonConvert.SerializeObject(word);
             var content = new StringContent(jsonContent);
-            await client.PostAsync("http://26.16.166.250:7269/api/Main/CheckWord?word=" + word, content);
+            await client.PostAsync("http://localhost:5279/api/Main/CheckWord?word=" + word, content);
 
             if(Manager.SecretWord == word)
             {

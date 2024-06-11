@@ -56,7 +56,7 @@ namespace Client.LowerAreas
             int num;
             try
             {
-                response = await client.GetAsync("http://26.16.166.250:7269/api/Main/CheckConnection?num=5");
+                response = await client.GetAsync("http://localhost:5279/api/Main/CheckConnection?num=5");
                 num = await response.Content.ReadAsAsync<int>();
                 if (num == 5)
                 {

@@ -13,7 +13,7 @@ namespace API
 
         public async void AddWord(string word)
         {
-            var path = @"C:\Users\Admin\Projects\TheGallow\API\Word.txt";
+            var path = @"C:\Users\Admin\Projects\C#\TheGallow\API\Word.txt";
             await File.WriteAllTextAsync(path, word);
         }
 
@@ -34,7 +34,7 @@ namespace API
 
         public string GetWord()
         {
-            var path = @"C:\Users\Admin\Projects\TheGallow\API\Word.txt";
+            var path = @"C:\Users\Admin\Projects\C#\TheGallow\API\Word.txt";
             var word = File.ReadAllText(path).ToLower();
             return word;
         }
@@ -42,7 +42,7 @@ namespace API
 
         public async void WriteLastLetter(char letter)
         {
-            var path = @"C:\Users\Admin\Projects\TheGallow\API\LLetter.txt";
+            var path = @"C:\Users\Admin\Projects\C#\TheGallow\API\LLetter.txt";
             var l = Convert.ToString(letter);
             await File.WriteAllTextAsync(path, l);
         }
@@ -57,7 +57,7 @@ namespace API
 
         public async void CheckWord(string word)
         {
-            var path = @"C:\Users\Admin\Projects\TheGallow\API\LLetter.txt";
+            var path = @"C:\Users\Admin\Projects\C#\TheGallow\API\LLetter.txt";
             await File.WriteAllTextAsync(path, word);
         }
 
@@ -91,7 +91,7 @@ namespace API
         /// <param name="word">Загадываемое слово</param>
         public void MakeSecret(string word)
         {
-            var path = @"C:\Users\Admin\Projects\TheGallow\API\Word.txt";
+            var path = @"C:\Users\Admin\Projects\C#\TheGallow\API\Word.txt";
             File.WriteAllTextAsync(path, word);
             IsSecretMade = true;
         }
@@ -145,7 +145,7 @@ namespace API
 
         public string TakeLastLetter()
         {
-            var path = @"C:\Users\Admin\Projects\TheGallow\API\LLetter.txt";
+            var path = @"C:\Users\Admin\Projects\C#\TheGallow\API\LLetter.txt";
             var charr = File.ReadAllText(path).ToLower();
             return charr;
         }
@@ -156,10 +156,10 @@ namespace API
             Destroyer = null;
             NumOfMistakes = 0;
 
-            var path = @"C:\Users\Admin\Projects\TheGallow\API\LLetter.txt";
+            var path = @"C:\Users\Admin\Projects\c#\TheGallow\API\LLetter.txt";
             await File.WriteAllTextAsync(path, "*");
 
-            path = @"C:\Users\Admin\Projects\TheGallow\API\Word.txt";
+            path = @"C:\Users\Admin\Projects\C#\TheGallow\API\Word.txt";
             await File.WriteAllTextAsync(path, "");
         }
     }

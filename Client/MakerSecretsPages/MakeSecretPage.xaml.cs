@@ -46,7 +46,7 @@ namespace Client.MakerSecretsPages
                 var word = TBXSecretWord.Text;
                 Manager.SecretWord = word;
 
-                await client.GetAsync("http://26.16.166.250:7269/api/Main/MakeSecret?word=" + word);
+                await client.GetAsync("http://localhost:5279/api/Main/MakeSecret?word=" + word);
 
                 TBKTitle.Text = "Введите количество возможных ошибок";
                 
@@ -82,7 +82,7 @@ namespace Client.MakerSecretsPages
             else
             {
                 numOfMistakes = Convert.ToInt32(lbl.Content);
-                await client.GetAsync("http://26.16.166.250:7269/api/Main/SetNumOfMistakes?num=" + numOfMistakes);
+                await client.GetAsync("http://localhost:5279/api/Main/SetNumOfMistakes?num=" + numOfMistakes);
                 Manager.MainAreaFrame.Navigate(new WaitingPage(Player.Roles.Maker, numOfMistakes));
             }
         }

@@ -41,7 +41,7 @@ namespace Client.MakerSecretsPages
         private async void TMR_TakeLetter(object? sender, EventArgs e)
         {
             
-            var response = await client.GetAsync("http://26.16.166.250:7269/api/Main/TakeLastLetter");
+            var response = await client.GetAsync("http://localhost:5279/api/Main/TakeLastLetter");
             string chr = await response.Content.ReadAsStringAsync();
             
             if(chr.Length > 1 && chr == Manager.SecretWord)
@@ -97,7 +97,7 @@ namespace Client.MakerSecretsPages
         
         private async void toMainMenuT()
         {
-            await client.GetAsync("http://26.16.166.250:7269/api/Main/ReloadAll");
+            await client.GetAsync("http://localhost:5279/api/Main/ReloadAll");
             timer.Stop();
             SPNOther.Children.Remove(SPNMistakes);
             TBXtoMainMenu.Focusable = true;

@@ -1,4 +1,8 @@
-﻿using System.Text;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -8,6 +12,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Client.BothRolePages;
+using Client.LowerAreas;
+using Client.StructuresAndOther;
 
 namespace Client
 {
@@ -19,6 +26,12 @@ namespace Client
         public MainWindow()
         {
             InitializeComponent();
+
+            Manager.MainAreaFrame = MainAreaFrame;
+            Manager.LowerAreaFrame = LowerAreaFrame;
+            LowerAreaFrame.Navigate(new MainLA());
+            MainAreaFrame.Navigate(new NoConnection());
+
         }
     }
 }
