@@ -1,0 +1,13 @@
+﻿using Entities;
+
+namespace API.Interfaces
+{
+    public interface IPlayer
+    {
+        public List<Player> GetPlayers();
+        public Player GetPlayer(int id);
+        public void AddPlayer(Player player);
+        public void UpdatePlayer(Player player);
+        public void DeletePlayer(int id);
+    }
+}
