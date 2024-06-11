@@ -1,0 +1,23 @@
+﻿<Page x:Class="Client.LowerAreas.MainLA"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Client"
+      mc:Ignorable="d" 
+      d:DesignHeight="50" d:DesignWidth="800"
+      Title="MainLA">
+
+    <Grid Background="White">
+        <StackPanel Name="SPNConnection" Orientation="Horizontal">
+            
+        <Canvas Height="50" Width="100" HorizontalAlignment="Left" Margin="0,0,10,0">
+            
+            <TextBlock Text="Ваш пк" Canvas.Top="15" Canvas.Left="10"/>
+            <Line X1="50" Y1="25" X2="70" Y2="25" StrokeThickness="3"  Stroke="Gray" Name="ConnectLine"/>
+            <TextBlock Text="API" Canvas.Top="15" Canvas.Left="73"/>
+        </Canvas>
+            <Button Height="30"  Width="150" Content = "Проверить соединение" VerticalAlignment="Center" Name = "BTNRConnect" IsEnabled="False" Click="BTN_RConnect"/>
+        </StackPanel>
+    </Grid>
+</Page>
