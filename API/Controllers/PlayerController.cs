@@ -28,6 +28,12 @@ namespace API.Controllers
             return Player.GetPlayer(id);
         }
 
+        [HttpGet("AutorizePlayer")]
+        public Player AutorizePlayer(string Login, string Password)
+        {
+            return Player.AutorizePlayer(Login, Password);
+        }
+
         [HttpPost("AddPlayer")]
         public void AddPlayer([FromBody]Player player)
         {

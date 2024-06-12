@@ -14,7 +14,6 @@ namespace API.Controllers
         }
 
 
-        
 
         [HttpGet(nameof(CheckLetter))]
         public List<int> CheckLetter(string letter)

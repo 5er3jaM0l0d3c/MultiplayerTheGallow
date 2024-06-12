@@ -33,7 +33,7 @@ public partial class TheGallowContext : DbContext
                 .IsUnicode(false);
 
             entity.HasOne(d => d.Destroyer).WithMany(p => p.GameDestroyers)
-                .HasForeignKey(d => d.Destroyerid)
+                .HasForeignKey(d => d.DestroyerId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Games_Players1");
 

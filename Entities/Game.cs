@@ -13,9 +13,14 @@ public partial class Game
 
     public int? MakerId { get; set; }
 
-    public int Destroyerid { get; set; }
+    public int DestroyerId { get; set; }
 
-    public virtual Player Destroyer { get; set; } = null!;
+    public virtual Player? Destroyer { get; set; } = null!;
 
     public virtual Player? Maker { get; set; }
+}
+
+public partial class Game
+{
+    public List<string> TrueLetters = new();
 }

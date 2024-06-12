@@ -28,7 +28,7 @@ namespace API.Controllers
         }
 
         [HttpPost("AddGame")]
-        public void AddGame([FromBody]Game game)
+        public void AddGame(int id)
         {
             Game.AddGame(game);
         }
