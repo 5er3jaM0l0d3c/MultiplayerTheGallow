@@ -28,7 +28,7 @@ namespace API.Controllers
         }
 
         [HttpGet("AddGame")]
-        public Game AddGame(int id)
+        public int AddGame(int id)
         {
             return Game.AddGame(id);
         }
@@ -52,7 +52,7 @@ namespace API.Controllers
         }
 
         [HttpGet("ConnectMaker")]
-        public Game? ConnectMaker(int MakerId, int GameId = -1)
+        public int? ConnectMaker(int MakerId, int GameId = -1)
         {
             return Game.ConnectMaker(MakerId, GameId);
         }
@@ -79,6 +79,18 @@ namespace API.Controllers
         public int GetMistakes(int GameId)
         {
             return Game.GetMistakes(GameId);
+        }
+
+        [HttpGet("IsGameSetted")]
+        public bool IsGameSetted(int GameId)
+        {
+            return Game.IsGameSetted(GameId);
+        }
+
+        [HttpGet("GetLastLetter")]
+        public string? GetLastLetter(int GameId)
+        {
+            return Game.GetLastLetter(GameId);
         }
     }
 }

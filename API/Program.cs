@@ -1,4 +1,3 @@
-using API;
 using API.Interfaces;
 using API.Services;
 using Entities;
@@ -12,6 +11,7 @@ builder.Services.AddDbContext<TheGallowContext>(option => option.UseSqlServer(bu
 
 builder.Services.AddScoped<IGame, GameServices>();
 builder.Services.AddScoped<IPlayer, PlayerServices>();  
+builder.Services.AddScoped<ITrueLetter, TrueLetterServices>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

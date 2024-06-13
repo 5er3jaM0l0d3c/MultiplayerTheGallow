@@ -36,17 +36,14 @@ namespace Client.MakerSecretsPages
         HttpClient client = new();
         int numOfMistakes;
         Label lbl = new Label();
-        
+        string word = "";
         private async void BTN_SecretWord(object sender, RoutedEventArgs e)
         {
             var btn = sender as Button;
             if(btn.Tag.ToString() == "1")
             {
 
-                var word = TBXSecretWord.Text;
-                Manager.Game.Word = word;
-
-                await client.GetAsync("http://localhost:5279/api/Main/MakeSecret?word=" + word);
+                word = TBXSecretWord.Text;
 
                 TBKTitle.Text = "Введите количество возможных ошибок";
                 
@@ -82,8 +79,8 @@ namespace Client.MakerSecretsPages
             else
             {
                 numOfMistakes = Convert.ToInt32(lbl.Content);
-                await client.GetAsync("http://localhost:5279/api/Main/SetNumOfMistakes?num=" + numOfMistakes);
-                //Manager.MainAreaFrame.Navigate(new WaitingPage(Player.Roles.Maker, numOfMistakes));
+                await client.GetAsync("http://localhost:5279/api/Game/SetGame?gameid=" + Manager.GameId + "&word=" + word + "&numOfMistakes=" + numOfMistakes);
+                Manager.MainAreaFrame.Navigate(new MakerMainPage());
             }
         }
 

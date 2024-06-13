@@ -15,13 +15,15 @@ namespace API.Services
         /// Создает экземпляр игровой сессии
         /// </summary>
         /// <param name="DestroyerId">Идентификатор игрока разгадываюего слово</param>
-        public Game AddGame(int DestroyerId)
+        public int AddGame(int DestroyerId)
         {
             var game = new Game();
             game.DestroyerId = DestroyerId;
             context.Add(game);
             context.SaveChanges();
-            return game;
+            var games = context.Games.ToList();
+            games.Reverse();
+            return games.FirstOrDefault(x => x.DestroyerId == DestroyerId).Id;
         }
 
         public void DeleteGame(int id)
@@ -67,6 +69,8 @@ namespace API.Services
             var game = GetGame(gameId);
             game.Word = word.ToLower().Replace(" ", "");
             game.MistakesNum = numOfMistakes;
+            context.Games.Update(game);
+            context.SaveChanges();
         }
         /// <summary>
         /// Подключение к экземпляру игровой сессии игрока загадывающего слово
@@ -76,7 +80,7 @@ namespace API.Services
         /// <returns>true - игра найдена</returns>
         /// <returns>false - поиск игры</returns>
         /// <exception cref="Exception">Выбрасывается если игровой сессии не существует или она занята</exception>
-        public Game? ConnectMaker(int MakerId, int GameId = -1)
+        public int? ConnectMaker(int MakerId, int GameId = -1)
         {  
             if (GameId == -1)
             {
@@ -87,7 +91,7 @@ namespace API.Services
                     game.Maker = context.Players.FirstOrDefault(x => x.Id == MakerId);
                     context.Games.Update(game);
                     context.SaveChanges();
-                    return game;
+                    return game.Id;
                 }
                 return null;
             }
@@ -97,7 +101,7 @@ namespace API.Services
                 if(game.MakerId == null)
                 {
                     game.MakerId= MakerId;
-                    return game;
+                    return game.Id;
                 }
                 else
                 {
@@ -130,8 +134,9 @@ namespace API.Services
         public bool CheckLetter(int GameId, string Letter)
         {
             var game = GetGame(GameId);
-
-            if (game.Word.Any(c => char.IsLetter(Letter.First())))
+            game.LastLetter = Letter;
+            context.Update(game);
+            if (game.Word.Any(c => c == Letter.First()))
             {
                 var trueLetter = new TrueLetter();
                 trueLetter.Letter = Letter;
@@ -142,6 +147,8 @@ namespace API.Services
             }
 
             game.MistakesNum--;
+            context.Update(game);
+            context.SaveChanges();
             return false;
         }
 
@@ -170,6 +177,23 @@ namespace API.Services
             #pragma warning disable CS8629 // Тип значения, допускающего NULL, может быть NULL.
             return (int)game.MistakesNum;
             #pragma warning restore CS8629 // Тип значения, допускающего NULL, может быть NULL.
+        }
+
+        public bool IsGameSetted(int GameId)
+        {
+            var game = GetGame(GameId);
+            if(game.Word != null)
+            {
+                return true;
+            }
+            else
+            { return false; }
+        }
+
+        public string? GetLastLetter(int GameId)
+        {
+            var game = GetGame(GameId);
+            return game.LastLetter;
         }
     }
 }

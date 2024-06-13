@@ -53,10 +53,10 @@ namespace Client.BothRolePages
             try
             {
                 var response = await client.GetAsync("http://localhost:5279/api/Game/ConnectMaker?MakerId=" + Manager.Player.Id);
-                var result = await response.Content.ReadAsAsync<Game>();
-                if (result != null)
+                var result = await response.Content.ReadAsAsync<int>();
+                if (result != 0)
                 {
-                    Manager.Game = result;
+                    Manager.GameId = result;
                     (sender as DispatcherTimer).Stop();
                     Manager.MainAreaFrame.Navigate(new MakeSecretPage());
                 }
@@ -78,7 +78,7 @@ namespace Client.BothRolePages
             try
             {
                 var response = await client.GetAsync("http://localhost:5279/api/Game/AddGame?id=" + Manager.Player.Id);
-                Manager.Game = await response.Content.ReadAsAsync<Game>();
+                Manager.GameId = await response.Content.ReadAsAsync<int>();
                 timer.Start();
             }
             catch
@@ -91,17 +91,31 @@ namespace Client.BothRolePages
         {
             try
             { 
-                var response = await client.GetAsync("http://localhost:5279/api/Game/IsMakerConnected?GameId=" + Manager.Game.Id);
+                var response = await client.GetAsync("http://localhost:5279/api/Game/IsMakerConnected?GameId=" + Manager.GameId);
                 var result = await response.Content.ReadAsAsync<bool>();
 
                 if(result)
                 {
-                    Manager.MainAreaFrame.Navigate(new DestroyerMainPage());
+                    //показать что этот гений нашелся и подключился
+                    (sender as DispatcherTimer).Tick -= CheckMakerConnection;
+                    (sender as DispatcherTimer).Tick += IsGameSetted;
                 }
             }
             catch
             {
                 MessageBox.Show("Нет подключения к серверу.");
+            }
+        }
+
+        private async void IsGameSetted(object? sender, EventArgs e)
+        {
+            var response = await client.GetAsync("http://localhost:5279/api/game/IsGameSetted?gameid=" + Manager.GameId);
+            var result = await response.Content.ReadAsAsync<bool>();
+
+            if(result)
+            {
+                (sender as DispatcherTimer).Stop();
+                Manager.MainAreaFrame.Navigate(new DestroyerMainPage());
             }
         }
     }

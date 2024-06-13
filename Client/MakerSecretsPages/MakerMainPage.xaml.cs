@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Net.Http;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
 using Client.BothRolePages;
 using Client.StructuresAndOther;
+using Entities;
 
 namespace Client.MakerSecretsPages
 {
@@ -15,23 +17,32 @@ namespace Client.MakerSecretsPages
     public partial class MakerMainPage : Page
     {
         DispatcherTimer timer = new DispatcherTimer();
-        int NumOfMistakes;
-      
-        public MakerMainPage(int numOfMistakes)
+        HttpClient client = new();
+
+
+        public MakerMainPage()
         {
             InitializeComponent();
             timer.Interval = TimeSpan.FromSeconds(1);
             timer.Tick += TMR_TakeLetter;
             timer.Start();
-            NumOfMistakes = numOfMistakes;
-            LBLNumOfMistakes.Content = ++NumOfMistakes;
-            for (int i = 0; i < Manager.Game.Word.Length; i++)
+            GetWord();
+            LBLNumOfMistakes.Content = 9;
+
+        }
+
+        private async void GetWord()
+        {
+            var response = await client.GetAsync("http://localhost:5279/api/Game/GetWord?GameId=" + Manager.GameId);
+            var result = await response.Content.ReadAsStringAsync();
+
+            for (int i = 0; i < result.Length; i++)
             {
                 var lbl = new Label
                 {
                     Foreground = Brushes.Black,
                     Name = "lbl" + i,
-                    Content = Manager.Game.Word[i],
+                    Content = result[i],
                     FontSize = 30,
                 };
                 SPNSecretWord.Children.Add(lbl);
@@ -40,72 +51,62 @@ namespace Client.MakerSecretsPages
 
         private async void TMR_TakeLetter(object? sender, EventArgs e)
         {
-            
-            var response = await client.GetAsync("http://localhost:5279/api/Main/TakeLastLetter");
-            string chr = await response.Content.ReadAsStringAsync();
-            
-            if(chr.Length > 1 && chr == Manager.Game.Word)
-            {
-                foreach(var item in SPNSecretWord.Children)
-                {
-                    var lbl = item as Label;
-                    lbl.Foreground = Brushes.Green;
-                }
-                
-            }
 
-            var toMainMenu = true;
-            var isLetterTrue = false;
-
-            foreach (var el in SPNSecretWord.Children)
+            var response = await client.GetAsync("http://localhost:5279/api/TrueLetter/GetTrueLetter?GameId=" + Manager.GameId);
+            var trueLetters = await response.Content.ReadAsAsync<List<TrueLetter>>();
+            
+          
+            foreach(var item in SPNSecretWord.Children)
             {
-                var lbl = el as Label;
-                if (lbl.Content.ToString() == chr.ToString())
-                {
-                    isLetterTrue = true;
+                var lbl = item as Label;
+                if (trueLetters.FirstOrDefault(x => x.Letter == lbl.Content.ToString()) != null)
                     lbl.Foreground = Brushes.LimeGreen;
-                }
-                if (lbl.Foreground == Brushes.Black)
-                {
-                    toMainMenu = false;
-                }
-            }
-            if (chr != LBLLastLetter.Content.ToString() && !isLetterTrue)
-            {
-                LBLNumOfMistakes.Content = --NumOfMistakes;
-                if (NumOfMistakes < 0)
-                {
-                    foreach (var item in SPNSecretWord.Children)
-                    {
-                        var lbl = item as Label;
-                        if (lbl.Content.ToString() == "*")
-                        {
-                            lbl.Foreground = Brushes.Red;
-                        }
-                    }
-                    toMainMenuT();
-                }
             }
 
-            LBLLastLetter.Content = chr;
+            response = await client.GetAsync("http://localhost:5279/api/Game/GetLastLetter?gameid=" + Manager.GameId);
+            var  lastLetter = await response.Content.ReadAsStringAsync() ?? " ";
+            
 
-            if (toMainMenu)
+            LBLLastLetter.Content = lastLetter;
+
+
+            List<Label> labels = new();
+
+            foreach (var item in SPNSecretWord.Children)
             {
-                toMainMenuT();
+                var lbl = item as Label;
+                labels.Add(lbl);
+            }
+
+            if(!labels.Any(x => x.Foreground == Brushes.Black))
+                toMainMenu();
+
+            response = await client.GetAsync("http://localhost:5279/api/Game/GetMistakes?gameid=" + Manager.GameId);
+            var mistakes = await response.Content.ReadAsAsync<int>();
+
+            if(mistakes < 0)
+            {
+                LBLNumOfMistakes.Content = "-";
+            }
+            else
+            {
+                LBLNumOfMistakes.Content = mistakes;
+            }
+
+            if(mistakes == -1)
+            {
+                toMainMenu();
             }
         }
         
-        private async void toMainMenuT()
+        private void toMainMenu()
         {
-            await client.GetAsync("http://localhost:5279/api/Main/ReloadAll");
             timer.Stop();
             SPNOther.Children.Remove(SPNMistakes);
             TBXtoMainMenu.Focusable = true;
             TBXtoMainMenu.Foreground = Brushes.Black;
             TBXtoMainMenu.Focus();
         }
-
-        HttpClient client = new();
 
         private void TBX_toMainMenu(object sender, KeyEventArgs e)
         {

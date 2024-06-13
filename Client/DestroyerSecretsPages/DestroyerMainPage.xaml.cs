@@ -20,6 +20,7 @@ using System.Windows.Shapes;
 using System.Windows.Threading;
 using Client.BothRolePages;
 using Client.StructuresAndOther;
+using Azure;
 
 namespace Client.DestroyerSecretsPages
 {
@@ -28,31 +29,18 @@ namespace Client.DestroyerSecretsPages
     /// </summary>
     public partial class DestroyerMainPage : Page
     {
-       DispatcherTimer timer = new DispatcherTimer();
-        int numOfMistakes;
-        string LLetter = "";
+        DispatcherTimer timer = new DispatcherTimer();
         public DestroyerMainPage()
         {
             InitializeComponent();
-            TakeWord();
-            GetNumOfMistakes();
-
-           
-
+            WriteWord();
 
             timer.Interval = TimeSpan.FromSeconds(1);
             timer.Tick += TMRAllClear;
             timer.Start();
         }
 
-        private async void GetNumOfMistakes()
-        {
-            var response = await client.GetAsync("http://localhost:5279/api/Main/GetNumOfMistakes");
-            numOfMistakes = Convert.ToInt32(await response.Content.ReadAsStringAsync());
-            LBLNumOfMistakes.Content = numOfMistakes;
-        }
-
-        private async void toMainMenuT()
+        private async void toMainMenu()
         {
 
             timer.Stop();
@@ -64,46 +52,49 @@ namespace Client.DestroyerSecretsPages
 
         }
 
-        private void TMRAllClear(object? sender, EventArgs e)
+        private async void TMRAllClear(object? sender, EventArgs e)
         {
-            var toMainMenu = false;
+            List<Label> labels = new();
             foreach(var item in SPNSecretLetters.Children)
             {
-                if(((Label)item).Content.ToString() != "*")
-                { toMainMenu = true; }
-                else { toMainMenu = false; break; }
+                var lbl = item as Label;
+                labels.Add(lbl);
                 
             }
-            if(toMainMenu)
+
+            if(!labels.Any(x => x.Content.Equals("*")))
             {
-                toMainMenuT();
-            }          
-            
-            if(numOfMistakes < 0)
+                toMainMenu();
+            }
+
+            var response = await client.GetAsync("http://localhost:5279/api/Game/GetMistakes?gameid=" + Manager.GameId);
+            var mistakes = await response.Content.ReadAsAsync<int>();
+
+            if (mistakes < 0)
             {
-                foreach(var item in SPNSecretLetters.Children)
-                {
-                    var lbl = (Label)item;
-                    if(lbl.Content.ToString() == "*")
-                    {
-                        lbl.Content = Manager.Game.Word[Convert.ToInt32(lbl.Tag)];
-                        lbl.Foreground = Brushes.Red;
-                    }
-                }
-                toMainMenuT();
+                LBLNumOfMistakes.Content = "-";
+            }
+            else
+            {
+                LBLNumOfMistakes.Content = mistakes;
+            }
+
+            if (mistakes == -1)
+            {
+                toMainMenu();
             }
         }
 
         HttpClient client = new();
-        private async void TakeWord()
+        private async void WriteWord()
         {
-            var response = await client.GetAsync("http://localhost:5279/api/Main/GetWord");
-            Manager.Game.Word = await response.Content.ReadAsStringAsync();
-            for (int i = 0; i < Manager.Game.Word.Length; i++)
+            var response = await client.GetAsync("http://localhost:5279/api/Game/GetWord?gameid=" + Manager.GameId);
+            var word = await response.Content.ReadAsStringAsync();
+            for (int i = 0; i < word.Length; i++)
             {
                 var lbl = new Label
                 {
-                    Tag = i,
+                    Tag = i + word[i].ToString(),
                     Content = "*",
                     FontSize = 30,
                 };
@@ -111,46 +102,26 @@ namespace Client.DestroyerSecretsPages
             }
         }
 
-        private async void CheckLetter(string SecretWord)
+        private async void CheckLetter()
         {
-            var chr = TBXLetter.Text.FirstOrDefault();
-            await client.GetAsync("http://localhost:5279/api/Main/WriteLastLetter?letter=" + chr);
-                
-            if (chr.ToString() == LLetter || SecretWord.Contains(chr))
-            {
-                ++numOfMistakes;
-            }
-            LLetter = chr.ToString();
-            List<int> pos = new List<int>();
+            var letter = TBXLetter.Text.FirstOrDefault();
+            var response = await client.GetAsync("http://localhost:5279/api/Game/CheckLetter?gameid=" + Manager.GameId + "&letter=" + letter.ToString());
+            var result = await response.Content.ReadAsAsync<bool>();
 
-            for (int i = 0; i < SecretWord.Length; i++)
+            if(result)
             {
-                if (SecretWord[i] == chr)
+                foreach(var item in SPNSecretLetters.Children)
                 {
-                    pos.Add(i);
-                }
-            }
-
-            if (pos.Count != 0)
-            {
-                foreach (var item in SPNSecretLetters.Children)
-                {
-                    var lbl = (Label)item;
-                   
-                    if (lbl.Tag.ToString() == pos.FirstOrDefault().ToString())
+                    var lbl = item as Label;
+                    if (lbl.Tag.ToString().Contains(letter.ToString()))
                     {
-                        lbl.Content = chr;
-                        pos.RemoveAt(0);
+                        lbl.Content = letter.ToString();
                     }
                 }
-                numOfMistakes--;
             }
-            else
-                numOfMistakes--;
-            LBLNumOfMistakes.Content = numOfMistakes;
         }
 
-        private async void CheckWord()
+        /*private async void CheckWord()
         {
             var word = TBXLetter.Text.ToString().ToLower().Trim();
 
@@ -166,24 +137,22 @@ namespace Client.DestroyerSecretsPages
                     int index = Convert.ToInt32(lbl.Tag);
                     lbl.Content = word[index];
                 }
-                toMainMenuT();
+                toMainMenu();
             }
-        }
+        }*/
 
         private void BTN_CheckLetter(object sender, RoutedEventArgs e)
         {
-            BTNCheckLetter.IsEnabled = false;
 
             if(TBNSwitch.IsChecked == false)
             {
-                CheckLetter(Manager.Game.Word);
+                CheckLetter();
             }
             else
             {
-                CheckWord();
+                //CheckWord();
             }
             TBXLetter.Text = "";
-            Thread.Sleep(1000);
             BTNCheckLetter.IsEnabled = true;
 
         }
