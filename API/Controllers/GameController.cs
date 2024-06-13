@@ -69,12 +69,6 @@ namespace API.Controllers
             return Game.CheckLetter(GameId, Letter);
         }
 
-        [HttpGet("FetchTrueLetters")]
-        public List<string> FetchTrueLetters(int GameId)
-        {
-            return Game.FetchTrueLetters(GameId);
-        }
-
         [HttpGet("GetWord")]
         public string GetWord(int GameId)
         {

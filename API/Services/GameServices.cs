@@ -66,7 +66,7 @@ namespace API.Services
         {
             var game = GetGame(gameId);
             game.Word = word.ToLower().Replace(" ", "");
-            game.Mistakes = numOfMistakes;
+            game.MistakesNum = numOfMistakes;
         }
         /// <summary>
         /// Подключение к экземпляру игровой сессии игрока загадывающего слово
@@ -133,24 +133,16 @@ namespace API.Services
 
             if (game.Word.Any(c => char.IsLetter(Letter.First())))
             {
-                game.TrueLetters.Add(Letter);
+                var trueLetter = new TrueLetter();
+                trueLetter.Letter = Letter;
+                trueLetter.GameId = GameId;
+                context.TrueLetters.Add(trueLetter);
+                context.SaveChanges();
                 return true;
             }
 
-            game.Mistakes--;
+            game.MistakesNum--;
             return false;
-        }
-        /// <summary>
-        /// Возвращает верные угаданные буквы в слове в данной игровой сессии
-        /// </summary>
-        /// <param name="GameId">Идентификатор сессии</param>
-        /// <returns>Список верных угаданных букв</returns>
-        /// <exception cref="Exception">Выбрасывается если данной игровой сессии нет</exception>
-        public List<string> FetchTrueLetters(int GameId)
-        {
-            var game = GetGame(GameId);
-            
-            return game.TrueLetters;
         }
 
         /// <summary>
@@ -176,7 +168,7 @@ namespace API.Services
             var game = GetGame(GameId); 
 
             #pragma warning disable CS8629 // Тип значения, допускающего NULL, может быть NULL.
-            return (int)game.Mistakes;
+            return (int)game.MistakesNum;
             #pragma warning restore CS8629 // Тип значения, допускающего NULL, может быть NULL.
         }
     }

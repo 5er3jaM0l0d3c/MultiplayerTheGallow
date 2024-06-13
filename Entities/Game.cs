@@ -9,7 +9,7 @@ public partial class Game
 
     public string? Word { get; set; }
 
-    public int? Mistakes { get; set; }
+    public int? MistakesNum { get; set; }
 
     public int? MakerId { get; set; }
 
@@ -18,9 +18,4 @@ public partial class Game
     public virtual Player? Destroyer { get; set; } = null!;
 
     public virtual Player? Maker { get; set; }
-}
-
-public partial class Game
-{
-    public List<string> TrueLetters = new();
 }
