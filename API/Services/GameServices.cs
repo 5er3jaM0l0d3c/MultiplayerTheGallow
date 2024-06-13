@@ -26,8 +26,15 @@ namespace API.Services
         public void DeleteGame(int id)
         {
             var game = context.Game.FirstOrDefault(x => x.Id == id);
-            context.Remove(game);
-            context.SaveChanges();
+            try 
+            {
+                context.Remove(game);
+                context.SaveChanges();
+            }
+            catch
+            {
+                throw new Exception("Ошибка удаления игровой сессии.");
+            }
         }
 
         public Game GetGame(int id)
@@ -95,6 +102,19 @@ namespace API.Services
             }
         }
 
+        /// <summary>
+        /// Проверяет присоединился ли игрок загадывающий слово к игровой сессии
+        /// </summary>
+        /// <param name="GameId">Идентификатор игры</param>
+        public bool IsMakerConnected(int GameId)
+        {
+            var game = GetGame(GameId);
+
+            if (game.MakerId != null)
+                return true;
+            else 
+                return false;
+        }
 
         /// <summary>
         /// Проверяет наличие буквы в слове
@@ -149,7 +169,7 @@ namespace API.Services
         /// <returns>Число допустимых ошибок</returns>
         public int GetMistakes(int GameId)
         {
-            var game = GetGame(GameId);
+            var game = GetGame(GameId); 
 
             #pragma warning disable CS8629 // Тип значения, допускающего NULL, может быть NULL.
             return (int)game.Mistakes;

@@ -30,7 +30,7 @@ namespace API.Controllers
         [HttpPost("AddGame")]
         public void AddGame(int id)
         {
-            Game.AddGame(game);
+            Game.AddGame(id);
         }
 
         [HttpPut("UpdateGame")]
@@ -43,6 +43,48 @@ namespace API.Controllers
         public void DeleteGame(int id)
         {
             Game.DeleteGame(id);
+        }
+
+        [HttpGet("SetGame")]
+        public void SetGame(int gameId, string word, int numOfMistakes)
+        {
+            Game.SetGame(gameId, word, numOfMistakes);
+        }
+
+        [HttpGet("ConnectMaker")]
+        public bool ConnectMaker(int MakerId, int GameId = -1)
+        {
+            return Game.ConnectMaker(MakerId, GameId);
+        }
+
+        [HttpGet("IsMakerConnected")]
+        public bool IsMakerConnected(int GameId)
+        {
+            return Game.IsMakerConnected(GameId);
+        }
+
+        [HttpGet("CheckLetter")]
+        public bool CheckLetter(int GameId, string Letter)
+        {
+            return Game.CheckLetter(GameId, Letter);
+        }
+
+        [HttpGet("FetchTrueLetters")]
+        public List<string> FetchTrueLetters(int GameId)
+        {
+            return Game.FetchTrueLetters(GameId);
+        }
+
+        [HttpGet("GetWord")]
+        public string GetWord(int GameId)
+        {
+            return Game.GetWord(GameId);
+        }
+
+        [HttpGet("GetMistakes")]
+        public int GetMistakes(int GameId)
+        {
+            return Game.GetMistakes(GameId);
         }
     }
 }

@@ -51,5 +51,7 @@ namespace API.Controllers
         {
             Player.DeletePlayer(id);
         }
+
+        
     }
 }
