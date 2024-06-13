@@ -17,8 +17,10 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 using API;
+using Client.DestroyerSecretsPages;
 using Client.MakerSecretsPages;
 using Client.StructuresAndOther;
+using Entities;
 
 namespace Client.BothRolePages
 {
@@ -36,37 +38,70 @@ namespace Client.BothRolePages
 
 
             
-        private async void BTN_MakeSecret(object sender, RoutedEventArgs e)
+        private void BTN_MakeSecret(object sender, RoutedEventArgs e)
         {
-            var response = await client.GetAsync("http://localhost:5279/api/Game/ConnectMaker?role=Maker");
-            var result = await response.Content.ReadAsAsync<bool>();
-            if(result)
+            DispatcherTimer timer = new DispatcherTimer()
             {
-                await client.GetAsync("http://localhost:5279/api/Main/CreatePlayer?role=Maker");
+                Interval = TimeSpan.FromMilliseconds(500),
+            };
+            timer.Tick += CheckGames;
+            timer.Start();
+        }
 
-                Manager.MainAreaFrame.Navigate(new MakeSecretPage());
-            }
-            else
+        private async void CheckGames(object sender, EventArgs e)
+        {
+            try
             {
-                MessageBox.Show("Данная роль уже занята :(");
-                BTN_DestroySecret(new object(), new RoutedEventArgs());
+                var response = await client.GetAsync("http://localhost:5279/api/Game/ConnectMaker?MakerId=" + Manager.Player.Id);
+                var result = await response.Content.ReadAsAsync<Game>();
+                if (result != null)
+                {
+                    Manager.Game = result;
+                    (sender as DispatcherTimer).Stop();
+                    Manager.MainAreaFrame.Navigate(new MakeSecretPage());
+                }
             }
-             
+            catch
+            {
+                MessageBox.Show("Нет подключения к серверу.");
+            }
         }
 
         private async void BTN_DestroySecret(object sender, RoutedEventArgs e)
         {
-            var response = await client.GetAsync("http://localhost:5279/api/Main/CanTakeRole?role=Destroyer");
-            var result = await response.Content.ReadAsAsync<bool>();
-            if (result)
+            DispatcherTimer timer = new DispatcherTimer()
             {
-                response = await client.GetAsync("http://localhost:5279/api/Main/CreatePlayer?role=Destroyer");
+                Interval = TimeSpan.FromMilliseconds(500),
+            };
+            timer.Tick += CheckMakerConnection;
 
-            }
-            else
+            try
             {
-                MessageBox.Show("Данная роль уже занята :(");
-                BTN_MakeSecret(new object(), new RoutedEventArgs());
+                var response = await client.GetAsync("http://localhost:5279/api/Game/AddGame?id=" + Manager.Player.Id);
+                Manager.Game = await response.Content.ReadAsAsync<Game>();
+                timer.Start();
+            }
+            catch
+            {
+                MessageBox.Show("Нет подключения к серверу.");
+            }
+        }
+
+        private async void CheckMakerConnection(object sender, EventArgs e)
+        {
+            try
+            { 
+                var response = await client.GetAsync("http://localhost:5279/api/Game/IsMakerConnected?GameId=" + Manager.Game.Id);
+                var result = await response.Content.ReadAsAsync<bool>();
+
+                if(result)
+                {
+                    Manager.MainAreaFrame.Navigate(new DestroyerMainPage());
+                }
+            }
+            catch
+            {
+                MessageBox.Show("Нет подключения к серверу.");
             }
         }
     }

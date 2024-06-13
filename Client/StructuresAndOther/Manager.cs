@@ -13,8 +13,8 @@ namespace Client.StructuresAndOther
     {
         public static Frame MainAreaFrame { get; set; }
         public static Frame LowerAreaFrame { get; set; }
-        public static string? SecretWord { get; set; }
         public static Player Player { get; set; }
+        public static Game Game { get; set; }
 
     }
 }

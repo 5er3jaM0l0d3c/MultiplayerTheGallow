@@ -15,17 +15,18 @@ namespace API.Services
         /// Создает экземпляр игровой сессии
         /// </summary>
         /// <param name="DestroyerId">Идентификатор игрока разгадываюего слово</param>
-        public void AddGame(int DestroyerId)
+        public Game AddGame(int DestroyerId)
         {
             var game = new Game();
             game.DestroyerId = DestroyerId;
             context.Add(game);
             context.SaveChanges();
+            return game;
         }
 
         public void DeleteGame(int id)
         {
-            var game = context.Game.FirstOrDefault(x => x.Id == id);
+            var game = context.Games.FirstOrDefault(x => x.Id == id);
             try 
             {
                 context.Remove(game);
@@ -39,12 +40,12 @@ namespace API.Services
 
         public Game GetGame(int id)
         {
-            return context.Game.Include(x => x.Destroyer).Include(x => x.Maker).FirstOrDefault(x => x.Id == id) ?? throw new Exception("Данной игровой сессии не существует.");
+            return context.Games.Include(x => x.Destroyer).Include(x => x.Maker).FirstOrDefault(x => x.Id == id) ?? throw new Exception("Данной игровой сессии не существует.");
         }
 
         public List<Game> GetGames()
         {
-            return context.Game.Include(x => x.Destroyer).Include(x => x.Maker).ToList();
+            return context.Games.Include(x => x.Destroyer).Include(x => x.Maker).ToList();
         }
 
         public void UpdateGame(Game game)
@@ -68,24 +69,27 @@ namespace API.Services
             game.Mistakes = numOfMistakes;
         }
         /// <summary>
-        /// Подключение к экземпляру игровой сессии игрока разгыдывающего слово
+        /// Подключение к экземпляру игровой сессии игрока загадывающего слово
         /// </summary>
         /// <param name="MakerId">Идентификатор игрока</param>
         /// <param name="GameId">Идентификатор игры (необязательный - добавляет в первую свободную игровую сессию)</param>
         /// <returns>true - игра найдена</returns>
         /// <returns>false - поиск игры</returns>
         /// <exception cref="Exception">Выбрасывается если игровой сессии не существует или она занята</exception>
-        public bool ConnectMaker(int MakerId, int GameId = -1)
-        {
+        public Game? ConnectMaker(int MakerId, int GameId = -1)
+        {  
             if (GameId == -1)
             {
-                var game =  GetGame(GameId);
+                var game = context.Games.Include(x => x.Maker).Include(x => x.Destroyer).FirstOrDefault(x => x.MakerId == null);
                 if(game != null)
                 {
                     game.MakerId = MakerId;
-                    return true;
+                    game.Maker = context.Players.FirstOrDefault(x => x.Id == MakerId);
+                    context.Games.Update(game);
+                    context.SaveChanges();
+                    return game;
                 }
-                return false;
+                return null;
             }
             else
             {
@@ -93,7 +97,7 @@ namespace API.Services
                 if(game.MakerId == null)
                 {
                     game.MakerId= MakerId;
-                    return true;
+                    return game;
                 }
                 else
                 {

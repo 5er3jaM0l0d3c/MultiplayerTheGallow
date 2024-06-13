@@ -6,11 +6,11 @@ namespace API.Interfaces
     {
         public List<Game> GetGames();
         public Game GetGame(int id);
-        public void AddGame(int MakerId);
+        public Game AddGame(int DestroyerId);
         public void UpdateGame(Game game);
         public void DeleteGame(int id);
         //---------------------------------------------- <<<< ГРАНИЦА НЕ ДЕФОЛТНЫХ СЕРВИСОВ >>>> ---------------------------------------------------
-        public bool ConnectMaker(int MakerId, int GameId = -1);
+        public Game? ConnectMaker(int MakerId, int GameId = -1);
         public void SetGame(int gameId, string word, int numOfMistakes);
         public bool CheckLetter(int GameId, string Letter);
         public List<string> FetchTrueLetters(int GameId);

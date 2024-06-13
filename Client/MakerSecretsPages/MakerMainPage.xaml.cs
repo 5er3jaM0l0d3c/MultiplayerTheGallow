@@ -25,13 +25,13 @@ namespace Client.MakerSecretsPages
             timer.Start();
             NumOfMistakes = numOfMistakes;
             LBLNumOfMistakes.Content = ++NumOfMistakes;
-            for (int i = 0; i < Manager.SecretWord.Length; i++)
+            for (int i = 0; i < Manager.Game.Word.Length; i++)
             {
                 var lbl = new Label
                 {
                     Foreground = Brushes.Black,
                     Name = "lbl" + i,
-                    Content = Manager.SecretWord[i],
+                    Content = Manager.Game.Word[i],
                     FontSize = 30,
                 };
                 SPNSecretWord.Children.Add(lbl);
@@ -44,7 +44,7 @@ namespace Client.MakerSecretsPages
             var response = await client.GetAsync("http://localhost:5279/api/Main/TakeLastLetter");
             string chr = await response.Content.ReadAsStringAsync();
             
-            if(chr.Length > 1 && chr == Manager.SecretWord)
+            if(chr.Length > 1 && chr == Manager.Game.Word)
             {
                 foreach(var item in SPNSecretWord.Children)
                 {

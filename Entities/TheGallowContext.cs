@@ -15,7 +15,7 @@ public partial class TheGallowContext : DbContext
     {
     }
 
-    public virtual DbSet<Game> Game { get; set; }
+    public virtual DbSet<Game> Games { get; set; }
 
     public virtual DbSet<Player> Players { get; set; }
 

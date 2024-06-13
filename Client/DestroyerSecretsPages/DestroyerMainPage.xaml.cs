@@ -86,7 +86,7 @@ namespace Client.DestroyerSecretsPages
                     var lbl = (Label)item;
                     if(lbl.Content.ToString() == "*")
                     {
-                        lbl.Content = Manager.SecretWord[Convert.ToInt32(lbl.Tag)];
+                        lbl.Content = Manager.Game.Word[Convert.ToInt32(lbl.Tag)];
                         lbl.Foreground = Brushes.Red;
                     }
                 }
@@ -98,8 +98,8 @@ namespace Client.DestroyerSecretsPages
         private async void TakeWord()
         {
             var response = await client.GetAsync("http://localhost:5279/api/Main/GetWord");
-            Manager.SecretWord = await response.Content.ReadAsStringAsync();
-            for (int i = 0; i < Manager.SecretWord.Length; i++)
+            Manager.Game.Word = await response.Content.ReadAsStringAsync();
+            for (int i = 0; i < Manager.Game.Word.Length; i++)
             {
                 var lbl = new Label
                 {
@@ -158,7 +158,7 @@ namespace Client.DestroyerSecretsPages
             var content = new StringContent(jsonContent);
             await client.PostAsync("http://localhost:5279/api/Main/CheckWord?word=" + word, content);
 
-            if(Manager.SecretWord == word)
+            if(Manager.Game.Word == word)
             {
                 foreach (var item in SPNSecretLetters.Children)
                 {
@@ -176,7 +176,7 @@ namespace Client.DestroyerSecretsPages
 
             if(TBNSwitch.IsChecked == false)
             {
-                CheckLetter(Manager.SecretWord);
+                CheckLetter(Manager.Game.Word);
             }
             else
             {

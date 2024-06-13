@@ -27,10 +27,10 @@ namespace API.Controllers
             return Game.GetGame(id);
         }
 
-        [HttpPost("AddGame")]
-        public void AddGame(int id)
+        [HttpGet("AddGame")]
+        public Game AddGame(int id)
         {
-            Game.AddGame(id);
+            return Game.AddGame(id);
         }
 
         [HttpPut("UpdateGame")]
@@ -52,7 +52,7 @@ namespace API.Controllers
         }
 
         [HttpGet("ConnectMaker")]
-        public bool ConnectMaker(int MakerId, int GameId = -1)
+        public Game? ConnectMaker(int MakerId, int GameId = -1)
         {
             return Game.ConnectMaker(MakerId, GameId);
         }

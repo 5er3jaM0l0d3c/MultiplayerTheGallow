@@ -44,7 +44,7 @@ namespace Client.MakerSecretsPages
             {
 
                 var word = TBXSecretWord.Text;
-                Manager.SecretWord = word;
+                Manager.Game.Word = word;
 
                 await client.GetAsync("http://localhost:5279/api/Main/MakeSecret?word=" + word);
 
