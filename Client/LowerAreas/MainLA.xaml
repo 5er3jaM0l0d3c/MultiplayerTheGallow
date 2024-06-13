@@ -9,15 +9,6 @@
       Title="MainLA">
 
     <Grid Background="White">
-        <StackPanel Name="SPNConnection" Orientation="Horizontal">
-            
-        <Canvas Height="50" Width="100" HorizontalAlignment="Left" Margin="0,0,10,0">
-            
-            <TextBlock Text="Ваш пк" Canvas.Top="15" Canvas.Left="10"/>
-            <Line X1="50" Y1="25" X2="70" Y2="25" StrokeThickness="3"  Stroke="Gray" Name="ConnectLine"/>
-            <TextBlock Text="API" Canvas.Top="15" Canvas.Left="73"/>
-        </Canvas>
-            <Button Height="30"  Width="150" Content = "Проверить соединение" VerticalAlignment="Center" Name = "BTNRConnect" IsEnabled="False" Click="BTN_RConnect"/>
-        </StackPanel>
+       
     </Grid>
 </Page>

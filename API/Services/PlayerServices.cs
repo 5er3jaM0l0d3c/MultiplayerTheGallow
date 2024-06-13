@@ -14,32 +14,32 @@ namespace API.Services
 
         public List<Player> GetPlayers()
         {
-            return context.Player.ToList();
+            return context.Players.ToList();
         }
 
         public Player GetPlayer(int id)
         {
-            return context.Player.FirstOrDefault(x => x.Id == id) ?? throw new Exception("Данного пользователя не существует.");
+            return context.Players.FirstOrDefault(x => x.Id == id) ?? throw new Exception("Данного пользователя не существует.");
         }
 
         public void AddPlayer(Player player)
         {
-            context.Player.Add(player);
+            context.Players.Add(player);
             context.SaveChanges();
         }
 
         public void UpdatePlayer(Player player)
         {
-            context.Player.Update(player);
+            context.Players.Update(player);
             context.SaveChanges();
         }
 
         public void DeletePlayer(int id)
         {
-            var player = context.Player.FirstOrDefault(x => x.Id == id);
+            var player = context.Players.FirstOrDefault(x => x.Id == id);
             try
             {
-                context.Player.Remove(player);
+                context.Players.Remove(player);
                 context.SaveChanges();
             }
             catch 
@@ -50,7 +50,7 @@ namespace API.Services
 
         public Player AutorizePlayer(string Login, string Password)
         {
-            var player = context.Player.FirstOrDefault(x => x.Login == Login && x.Password == Password);
+            var player = context.Players.FirstOrDefault(x => x.Login == Login && x.Password == Password);
             return player ?? throw new Exception("Неправильный логин или пароль.");
         }
     }

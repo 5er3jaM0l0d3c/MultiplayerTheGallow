@@ -23,7 +23,4 @@ public partial class Player
 
     public bool IsPlaying { get; set; }
 
-    public virtual ICollection<Game> GameDestroyers { get; set; } = new List<Game>();
-
-    public virtual ICollection<Game> GameMakers { get; set; } = new List<Game>();
 }

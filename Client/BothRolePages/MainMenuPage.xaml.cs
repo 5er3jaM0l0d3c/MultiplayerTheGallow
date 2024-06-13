@@ -27,53 +27,22 @@ namespace Client.BothRolePages
     /// </summary>
     public partial class MainMenuPage : Page
     {
-
-        DispatcherTimer timerr = new DispatcherTimer()
-        {
-            Interval = TimeSpan.FromMilliseconds(500),
-
-        };
         public MainMenuPage()
         {
             InitializeComponent();
-            
-            timerr.Tick +=Timerr_Tick;
-            timerr.Start();
-            
-                
         }
 
-        private void Timerr_Tick(object? sender, EventArgs e)
-        {
-            CheckRole(Player.Roles.Maker);
-            CheckRole(Player.Roles.Destroyer);
-        }
+        HttpClient client = new();
 
-        HttpClient client = Manager.client;
 
-        private async void CheckRole(Player.Roles role)
-        {
-            string Role = role.ToString();
-            var response = await client.GetAsync("http://localhost:5279/api/Main/CanTakeRole?role=" + Role);
-            var result = await response.Content.ReadAsAsync<bool>();   
-            if(role == Player.Roles.Maker)
-            {
-                BTNMake.IsEnabled = result;
-            }
-            else
-            {
-                BTNDestroy.IsEnabled = result;
-            }
-        }
             
         private async void BTN_MakeSecret(object sender, RoutedEventArgs e)
         {
-            var response = await client.GetAsync("http://localhost:5279/api/Main/CanTakeRole?role=Maker");
+            var response = await client.GetAsync("http://localhost:5279/api/Game/ConnectMaker?role=Maker");
             var result = await response.Content.ReadAsAsync<bool>();
             if(result)
             {
                 await client.GetAsync("http://localhost:5279/api/Main/CreatePlayer?role=Maker");
-                timerr.Stop();
 
                 Manager.MainAreaFrame.Navigate(new MakeSecretPage());
             }
@@ -92,8 +61,7 @@ namespace Client.BothRolePages
             if (result)
             {
                 response = await client.GetAsync("http://localhost:5279/api/Main/CreatePlayer?role=Destroyer");
-                timerr.Stop();
-                Manager.MainAreaFrame.Navigate(new WaitingPage(Player.Roles.Destroyer));
+
             }
             else
             {

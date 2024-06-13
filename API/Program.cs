@@ -1,12 +1,15 @@
 using API;
 using API.Interfaces;
 using API.Services;
+using Entities;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-;
+builder.Services.AddDbContext<TheGallowContext>(option => option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
 builder.Services.AddScoped<IGame, GameServices>();
 builder.Services.AddScoped<IPlayer, PlayerServices>();  
 

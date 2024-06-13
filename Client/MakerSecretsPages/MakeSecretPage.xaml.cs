@@ -33,7 +33,7 @@ namespace Client.MakerSecretsPages
 
         }
 
-        HttpClient client = Manager.client;
+        HttpClient client = new();
         int numOfMistakes;
         Label lbl = new Label();
         
@@ -83,7 +83,7 @@ namespace Client.MakerSecretsPages
             {
                 numOfMistakes = Convert.ToInt32(lbl.Content);
                 await client.GetAsync("http://localhost:5279/api/Main/SetNumOfMistakes?num=" + numOfMistakes);
-                Manager.MainAreaFrame.Navigate(new WaitingPage(Player.Roles.Maker, numOfMistakes));
+                //Manager.MainAreaFrame.Navigate(new WaitingPage(Player.Roles.Maker, numOfMistakes));
             }
         }
 

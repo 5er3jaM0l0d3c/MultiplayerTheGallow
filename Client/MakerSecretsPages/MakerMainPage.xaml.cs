@@ -105,7 +105,7 @@ namespace Client.MakerSecretsPages
             TBXtoMainMenu.Focus();
         }
 
-        HttpClient client = Manager.client;
+        HttpClient client = new();
 
         private void TBX_toMainMenu(object sender, KeyEventArgs e)
         {

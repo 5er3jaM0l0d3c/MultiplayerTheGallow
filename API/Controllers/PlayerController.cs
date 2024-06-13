@@ -52,6 +52,10 @@ namespace API.Controllers
             Player.DeletePlayer(id);
         }
 
-        
+        [HttpGet("CheckConnection")]
+        public void CheckConnection()
+        {
+            return;
+        }
     }
 }

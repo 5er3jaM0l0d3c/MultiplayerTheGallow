@@ -94,7 +94,7 @@ namespace Client.DestroyerSecretsPages
             }
         }
 
-        HttpClient client = Manager.client;
+        HttpClient client = new();
         private async void TakeWord()
         {
             var response = await client.GetAsync("http://localhost:5279/api/Main/GetWord");

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
@@ -13,9 +14,7 @@ namespace Client.StructuresAndOther
         public static Frame MainAreaFrame { get; set; }
         public static Frame LowerAreaFrame { get; set; }
         public static string? SecretWord { get; set; }
-        public static HttpClient client { get; set; }
-
-        
+        public static Player Player { get; set; }
 
     }
 }

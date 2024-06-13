@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace Client.BothRolePages
 {
     /// <summary>
-    /// Логика взаимодействия для NoConnection.xaml
+    /// Логика взаимодействия для RegistrationPage.xaml
     /// </summary>
-    public partial class NoConnection : Page
+    public partial class RegistrationPage : Page
     {
-        public NoConnection()
+        public RegistrationPage()
         {
             InitializeComponent();
         }

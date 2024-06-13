@@ -10,5 +10,6 @@ namespace API.Interfaces
         public void AddPlayer(Player player);
         public void UpdatePlayer(Player player);
         public void DeletePlayer(int id);
+
     }
 }
