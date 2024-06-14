@@ -45,6 +45,7 @@ namespace Client.BothRolePages
                     ErrorTBX.Visibility = Visibility.Visible; return;
                 }
                 Manager.Player = await response.Content.ReadAsAsync<Player>();
+               
                 Manager.MainAreaFrame.Navigate(new MainMenuPage());
             }
             catch

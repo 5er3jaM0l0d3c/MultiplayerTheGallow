@@ -29,7 +29,8 @@ namespace Client
 
             Manager.MainAreaFrame = MainAreaFrame;
             Manager.LowerAreaFrame = LowerAreaFrame;
-            LowerAreaFrame.Navigate(new MainLA());
+            Manager.LowerArea = new MainLA();
+            LowerAreaFrame.Navigate(Manager.LowerArea);
             MainAreaFrame.Navigate(new EnterPage());
 
         }

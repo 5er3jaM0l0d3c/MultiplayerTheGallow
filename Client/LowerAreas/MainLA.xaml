@@ -9,6 +9,30 @@
       Title="MainLA">
 
     <Grid Background="White">
-       
+        <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Left" VerticalAlignment="Center">
+            <TextBlock Name="LoginTBK"/>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Right" VerticalAlignment="Center" Name="LoadingSPN" Visibility="Hidden">
+            <TextBlock Name="LoadingTBK"  VerticalAlignment="Center" Margin="0,0,10,0"/>
+            <Image Source="loading.png"
+                Height="30" Width="30">
+                <Image.RenderTransform>
+                    <RotateTransform x:Name="rotate"
+                         CenterX="15"
+                         CenterY="15"/>
+                </Image.RenderTransform>
+                <Image.Triggers>
+                    <EventTrigger RoutedEvent="Loaded">
+                        <BeginStoryboard>
+                            <Storyboard RepeatBehavior="Forever">
+                                <DoubleAnimation Storyboard.TargetName="rotate"
+                                     Storyboard.TargetProperty="Angle"
+                                     By="360" Duration="0:0:1"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger>
+                </Image.Triggers>
+            </Image>
+        </StackPanel>
     </Grid>
 </Page>

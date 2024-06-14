@@ -14,7 +14,7 @@ namespace API.Services
         /// <summary>
         /// Создает экземпляр игровой сессии
         /// </summary>
-        /// <param name="MakerId">Идентификатор игрока разгадываюего слово</param>
+        /// <param name="MakerId">Идентификатор игрока загадывающего слово</param>
         public int AddGame(int MakerId)
         {
             var game = new Game();
@@ -73,9 +73,9 @@ namespace API.Services
             context.SaveChanges();
         }
         /// <summary>
-        /// Подключение к экземпляру игровой сессии игрока загадывающего слово
+        /// Подключение к экземпляру игровой сессии игрока отгадывающего слово
         /// </summary>
-        /// <param name="MakerId">Идентификатор игрока</param>
+        /// <param name="DestroyerId">Идентификатор игрока</param>
         /// <param name="GameId">Идентификатор игры (необязательный - добавляет в первую свободную игровую сессию)</param>
         /// <returns>true - игра найдена</returns>
         /// <returns>false - поиск игры</returns>
@@ -111,7 +111,7 @@ namespace API.Services
         }
 
         /// <summary>
-        /// Проверяет присоединился ли игрок загадывающий слово к игровой сессии
+        /// Проверяет присоединился ли игрок отгадывающий слово к игровой сессии
         /// </summary>
         /// <param name="GameId">Идентификатор игры</param>
         public bool IsDestroyerConnected(int GameId)
@@ -179,6 +179,11 @@ namespace API.Services
             #pragma warning restore CS8629 // Тип значения, допускающего NULL, может быть NULL.
         }
 
+        /// <summary>
+        /// Проверяет готова ли игра к началу (загадано ли слово и количество допустимых ошибок) 
+        /// </summary>
+        /// <param name="GameId">Идентификатор игры</param>
+        /// <returns>true - игра готова; false - игра не готова</returns>
         public bool IsGameSetted(int GameId)
         {
             var game = GetGame(GameId);
@@ -189,7 +194,11 @@ namespace API.Services
             else
             { return false; }
         }
-
+        /// <summary>
+        /// Возвращает последнюю проверенную букву
+        /// </summary>
+        /// <param name="GameId">Идентификатор игры</param>
+        /// <returns>Буква</returns>
         public string? GetLastLetter(int GameId)
         {
             var game = GetGame(GameId);

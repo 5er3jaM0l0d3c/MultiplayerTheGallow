@@ -32,6 +32,7 @@ namespace Client.BothRolePages
         public MainMenuPage()
         {
             InitializeComponent();
+            Manager.LowerArea.LoginTBK.Text = Manager.Player.Login;
         }
 
         HttpClient client = new();
@@ -47,10 +48,14 @@ namespace Client.BothRolePages
             };
             timer.Tick += CheckGames;
             timer.Start();
+            Manager.LowerArea.LoadingTBK.Text = "Поиск свободной комнаты...";
+            Manager.LowerArea.LoadingSPN.Visibility = Visibility.Visible;
         }
 
         private async void CheckGames(object sender, EventArgs e)
         {
+
+           
             try
             {
                 var response = await client.GetAsync("http://localhost:5279/api/Game/ConnectDestroyer?DestroyerId=" + Manager.Player.Id);
@@ -60,6 +65,7 @@ namespace Client.BothRolePages
                     Manager.GameId = result;
                     (sender as DispatcherTimer).Tick -=CheckGames;
                     (sender as DispatcherTimer).Tick +=IsGameSetted;
+                    Manager.LowerArea.LoadingTBK.Text = "Ожидание оппонента...";
                 }
             }
             catch
@@ -74,6 +80,7 @@ namespace Client.BothRolePages
 
             if(result)
             {
+                Manager.LowerArea.LoadingSPN.Visibility = Visibility.Hidden;
                 (sender as DispatcherTimer).Stop();
                 Manager.MainAreaFrame.Navigate(new DestroyerMainPage());
             }
