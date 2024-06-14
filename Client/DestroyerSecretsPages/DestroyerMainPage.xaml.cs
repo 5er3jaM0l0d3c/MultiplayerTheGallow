@@ -81,6 +81,18 @@ namespace Client.DestroyerSecretsPages
 
             if (mistakes == -1)
             {
+                response = await client.GetAsync("http://localhost:5279/api/Game/GetWord?gameid=" + Manager.GameId);
+                var word = await response.Content.ReadAsStringAsync();
+                
+                for(int i = 0; i < word.Length; i++)
+                {
+                    if (labels[i].Content.ToString() != word[i].ToString())
+                    {
+                        labels[i].Foreground = Brushes.Red;
+                        labels[i].Content = word[i];
+                    }
+                }
+
                 toMainMenu();
             }
         }
@@ -120,26 +132,6 @@ namespace Client.DestroyerSecretsPages
                 }
             }
         }
-
-        /*private async void CheckWord()
-        {
-            var word = TBXLetter.Text.ToString().ToLower().Trim();
-
-            var jsonContent = JsonConvert.SerializeObject(word);
-            var content = new StringContent(jsonContent);
-            await client.PostAsync("http://localhost:5279/api/Main/CheckWord?word=" + word, content);
-
-            if(Manager.Game.Word == word)
-            {
-                foreach (var item in SPNSecretLetters.Children)
-                {
-                    var lbl = (Label)item;
-                    int index = Convert.ToInt32(lbl.Tag);
-                    lbl.Content = word[index];
-                }
-                toMainMenu();
-            }
-        }*/
 
         private void BTN_CheckLetter(object sender, RoutedEventArgs e)
         {
@@ -182,7 +174,8 @@ namespace Client.DestroyerSecretsPages
 
         private void TBK_toMainMenu(object sender, KeyEventArgs e)
         {
-            Manager.MainAreaFrame.Navigate(new MainMenuPage());
+            Manager.MainAreaFrame.Navigate(Manager.LowerArea.MainMenuPage);
+            
         }
     }
 }

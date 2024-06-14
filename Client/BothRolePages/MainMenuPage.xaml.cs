@@ -69,7 +69,10 @@ namespace Client.BothRolePages
         {
 
             if (IsCancelSearchGame)
+            {
                 (sender as DispatcherTimer).Stop();
+                IsCancelSearchGame = false;
+            }
             try
             {
                 var response = await client.GetAsync("http://localhost:5279/api/Game/ConnectDestroyer?DestroyerId=" + Manager.Player.Id);
@@ -98,6 +101,12 @@ namespace Client.BothRolePages
             {
                 Manager.LowerArea.LoadingSPN.Visibility = Visibility.Hidden;
                 (sender as DispatcherTimer).Stop();
+
+                Manager.LowerArea.LoginSPN.Visibility = Visibility.Visible;
+                Manager.LowerArea.CancelGameSPN.Visibility = Visibility.Hidden;
+                BTNDestroy.IsEnabled = true;
+                BTNMake.IsEnabled = true;
+
                 Manager.MainAreaFrame.Navigate(new DestroyerMainPage());
             }
         }

@@ -27,7 +27,6 @@ namespace Client.MakerSecretsPages
             timer.Tick += TMR_TakeLetter;
             timer.Start();
             GetWord();
-            LBLNumOfMistakes.Content = 9;
 
         }
 
