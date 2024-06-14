@@ -14,16 +14,16 @@ namespace API.Services
         /// <summary>
         /// Создает экземпляр игровой сессии
         /// </summary>
-        /// <param name="DestroyerId">Идентификатор игрока разгадываюего слово</param>
-        public int AddGame(int DestroyerId)
+        /// <param name="MakerId">Идентификатор игрока разгадываюего слово</param>
+        public int AddGame(int MakerId)
         {
             var game = new Game();
-            game.DestroyerId = DestroyerId;
+            game.MakerId = MakerId;
             context.Add(game);
             context.SaveChanges();
             var games = context.Games.ToList();
             games.Reverse();
-            return games.FirstOrDefault(x => x.DestroyerId == DestroyerId).Id;
+            return games.FirstOrDefault(x => x.MakerId == MakerId).Id;
         }
 
         public void DeleteGame(int id)
@@ -80,15 +80,15 @@ namespace API.Services
         /// <returns>true - игра найдена</returns>
         /// <returns>false - поиск игры</returns>
         /// <exception cref="Exception">Выбрасывается если игровой сессии не существует или она занята</exception>
-        public int? ConnectMaker(int MakerId, int GameId = -1)
+        public int? ConnectDestroyer(int DestroyerId, int GameId = -1)
         {  
             if (GameId == -1)
             {
-                var game = context.Games.Include(x => x.Maker).Include(x => x.Destroyer).FirstOrDefault(x => x.MakerId == null);
+                var game = context.Games.Include(x => x.Maker).Include(x => x.Destroyer).FirstOrDefault(x => x.DestroyerId == null);
                 if(game != null)
                 {
-                    game.MakerId = MakerId;
-                    game.Maker = context.Players.FirstOrDefault(x => x.Id == MakerId);
+                    game.DestroyerId = DestroyerId;
+                    game.Destroyer = context.Players.FirstOrDefault(x => x.Id == DestroyerId);
                     context.Games.Update(game);
                     context.SaveChanges();
                     return game.Id;
@@ -98,9 +98,9 @@ namespace API.Services
             else
             {
                 var game = GetGame(GameId);
-                if(game.MakerId == null)
+                if(game.DestroyerId == null)
                 {
-                    game.MakerId= MakerId;
+                    game.DestroyerId = DestroyerId;
                     return game.Id;
                 }
                 else
@@ -114,11 +114,11 @@ namespace API.Services
         /// Проверяет присоединился ли игрок загадывающий слово к игровой сессии
         /// </summary>
         /// <param name="GameId">Идентификатор игры</param>
-        public bool IsMakerConnected(int GameId)
+        public bool IsDestroyerConnected(int GameId)
         {
             var game = GetGame(GameId);
 
-            if (game.MakerId != null)
+            if (game.DestroyerId != null)
                 return true;
             else 
                 return false;

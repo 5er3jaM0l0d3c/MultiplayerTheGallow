@@ -51,16 +51,16 @@ namespace API.Controllers
             Game.SetGame(gameId, word, numOfMistakes);
         }
 
-        [HttpGet("ConnectMaker")]
-        public int? ConnectMaker(int MakerId, int GameId = -1)
+        [HttpGet("ConnectDestroyer")]
+        public int? ConnectDestroyer(int DestroyerId, int GameId = -1)
         {
-            return Game.ConnectMaker(MakerId, GameId);
+            return Game.ConnectDestroyer(DestroyerId, GameId);
         }
 
-        [HttpGet("IsMakerConnected")]
-        public bool IsMakerConnected(int GameId)
+        [HttpGet("IsDestroyerConnected")]
+        public bool IsDestroyerConnected(int GameId)
         {
-            return Game.IsMakerConnected(GameId);
+            return Game.IsDestroyerConnected(GameId);
         }
 
         [HttpGet("CheckLetter")]

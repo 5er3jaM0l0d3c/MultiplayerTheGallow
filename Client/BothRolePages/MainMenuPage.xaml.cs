@@ -38,7 +38,8 @@ namespace Client.BothRolePages
 
 
             
-        private void BTN_MakeSecret(object sender, RoutedEventArgs e)
+
+        private  void BTN_DestroySecret(object sender, RoutedEventArgs e)
         {
             DispatcherTimer timer = new DispatcherTimer()
             {
@@ -52,13 +53,13 @@ namespace Client.BothRolePages
         {
             try
             {
-                var response = await client.GetAsync("http://localhost:5279/api/Game/ConnectMaker?MakerId=" + Manager.Player.Id);
+                var response = await client.GetAsync("http://localhost:5279/api/Game/ConnectDestroyer?DestroyerId=" + Manager.Player.Id);
                 var result = await response.Content.ReadAsAsync<int>();
                 if (result != 0)
                 {
                     Manager.GameId = result;
-                    (sender as DispatcherTimer).Stop();
-                    Manager.MainAreaFrame.Navigate(new MakeSecretPage());
+                    (sender as DispatcherTimer).Tick -=CheckGames;
+                    (sender as DispatcherTimer).Tick +=IsGameSetted;
                 }
             }
             catch
@@ -66,47 +67,6 @@ namespace Client.BothRolePages
                 MessageBox.Show("Нет подключения к серверу.");
             }
         }
-
-        private async void BTN_DestroySecret(object sender, RoutedEventArgs e)
-        {
-            DispatcherTimer timer = new DispatcherTimer()
-            {
-                Interval = TimeSpan.FromMilliseconds(500),
-            };
-            timer.Tick += CheckMakerConnection;
-
-            try
-            {
-                var response = await client.GetAsync("http://localhost:5279/api/Game/AddGame?id=" + Manager.Player.Id);
-                Manager.GameId = await response.Content.ReadAsAsync<int>();
-                timer.Start();
-            }
-            catch
-            {
-                MessageBox.Show("Нет подключения к серверу.");
-            }
-        }
-
-        private async void CheckMakerConnection(object sender, EventArgs e)
-        {
-            try
-            { 
-                var response = await client.GetAsync("http://localhost:5279/api/Game/IsMakerConnected?GameId=" + Manager.GameId);
-                var result = await response.Content.ReadAsAsync<bool>();
-
-                if(result)
-                {
-                    //показать что этот гений нашелся и подключился
-                    (sender as DispatcherTimer).Tick -= CheckMakerConnection;
-                    (sender as DispatcherTimer).Tick += IsGameSetted;
-                }
-            }
-            catch
-            {
-                MessageBox.Show("Нет подключения к серверу.");
-            }
-        }
-
         private async void IsGameSetted(object? sender, EventArgs e)
         {
             var response = await client.GetAsync("http://localhost:5279/api/game/IsGameSetted?gameid=" + Manager.GameId);
@@ -117,6 +77,23 @@ namespace Client.BothRolePages
                 (sender as DispatcherTimer).Stop();
                 Manager.MainAreaFrame.Navigate(new DestroyerMainPage());
             }
+        }
+        //----------------------------------------- <<< ГРАНИЦА ФУНКЦИЙ ДЛЯ ИГРОКОВ >>> --------------------------------------
+        private async void BTN_MakeSecret(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var response = await client.GetAsync("http://localhost:5279/api/Game/AddGame?id=" + Manager.Player.Id);
+                Manager.GameId = await response.Content.ReadAsAsync<int>();
+            }
+            catch
+            {
+                MessageBox.Show("Нет подключения к серверу.");
+            }
+
+            Manager.MainAreaFrame.Navigate(new MakeSecretPage());
+
+            
         }
     }
 }

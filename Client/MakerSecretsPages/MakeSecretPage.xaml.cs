@@ -18,6 +18,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Client.BothRolePages;
 using Client.StructuresAndOther;
+using System.Windows.Threading;
 
 namespace Client.MakerSecretsPages
 {
@@ -80,7 +81,34 @@ namespace Client.MakerSecretsPages
             {
                 numOfMistakes = Convert.ToInt32(lbl.Content);
                 await client.GetAsync("http://localhost:5279/api/Game/SetGame?gameid=" + Manager.GameId + "&word=" + word + "&numOfMistakes=" + numOfMistakes);
-                Manager.MainAreaFrame.Navigate(new MakerMainPage());
+
+                DispatcherTimer timer = new DispatcherTimer()
+                {
+                    Interval = TimeSpan.FromMilliseconds(500),
+                };
+
+                timer.Tick += CheckDestroyerConnection;
+
+                timer.Start();
+            }
+        }
+        private async void CheckDestroyerConnection(object sender, EventArgs e)
+        {
+            try
+            {
+                var response = await client.GetAsync("http://localhost:5279/api/Game/IsDestroyerConnected?GameId=" + Manager.GameId);
+                var result = await response.Content.ReadAsAsync<bool>();
+
+                if (result)
+                {
+                    //показать что этот гений нашелся и подключился
+                    (sender as DispatcherTimer).Stop();
+                    Manager.MainAreaFrame.Navigate(new MakerMainPage());
+                }
+            }
+            catch
+            {
+                MessageBox.Show("Нет подключения к серверу.");
             }
         }
 
