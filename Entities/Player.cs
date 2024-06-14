@@ -5,6 +5,18 @@ namespace Entities;
 
 public partial class Player
 {
+
+    public Player(string Login, string Password)
+    {
+        this.Login = Login;
+        this.Password = Password;
+        MakerPlayTimes = 0;
+        DestroyerPlayTimes = 0;
+        MakerPlayWinningTimes = 0;
+        DestroyerPlayWinningTimes = 0;
+        IsOnline = true;
+        IsPlaying = false;
+    }
     public int Id { get; set; }
 
     public string Login { get; set; } = null!;

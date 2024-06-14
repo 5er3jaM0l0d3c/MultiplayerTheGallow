@@ -21,7 +21,7 @@
             </StackPanel>
             <TextBlock Text="Неправильный логин или пароль." Foreground="Red" Name="ErrorTBX" Visibility="Hidden" Margin="0,5,0,0"/>
             <Button Width="100" IsDefault="true" Height="30" HorizontalAlignment="Center" Content="Войти" Margin="0,10,0,0" Click="EnterBTNCLick"/>
-            <TextBlock Text="Зарегистрироваться" FontSize="10" HorizontalAlignment="Center" Foreground="Blue" TextDecorations="Underline" MouseLeftButtonUp="RegistrationTBXClick"/>
+            <TextBlock Text="Зарегистрироваться" Cursor="Hand" FontSize="10" HorizontalAlignment="Center" Foreground="Blue" TextDecorations="Underline" MouseLeftButtonUp="RegistrationTBXClick"/>
         </StackPanel>
     </Grid>
 </Page>

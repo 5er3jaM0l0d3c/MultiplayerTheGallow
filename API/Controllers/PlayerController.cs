@@ -22,10 +22,16 @@ namespace API.Controllers
             return Player.GetPlayers();
         }
 
-        [HttpGet("GetPlayer")]
+        [HttpGet("GetPlayerId")]
         public Player GetPlayer(int id)
         {
             return Player.GetPlayer(id);
+        }
+
+        [HttpGet("GetPlayerLP")]
+        public Player GetPlayer(string Login, string Password)
+        {
+            return Player.GetPlayer(Login, Password);
         }
 
         [HttpGet("AutorizePlayer")]

@@ -6,6 +6,7 @@ namespace API.Interfaces
     {
         public List<Player> GetPlayers();
         public Player GetPlayer(int id);
+        public Player GetPlayer(string Login, string Password);
         public Player AutorizePlayer(string Login, string Password);
         public void AddPlayer(Player player);
         public void UpdatePlayer(Player player);

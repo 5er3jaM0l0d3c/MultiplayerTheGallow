@@ -21,6 +21,10 @@ namespace API.Services
         {
             return context.Players.FirstOrDefault(x => x.Id == id) ?? throw new Exception("Данного пользователя не существует.");
         }
+        public Player GetPlayer(string Login, string Password)
+        {
+            return context.Players.FirstOrDefault(x => x.Login == Login && x.Password == Password) ?? throw new Exception("Данного пользователя не существует.");
+        }
 
         public void AddPlayer(Player player)
         {
@@ -53,5 +57,6 @@ namespace API.Services
             var player = context.Players.FirstOrDefault(x => x.Login == Login && x.Password == Password);
             return player ?? throw new Exception("Неправильный логин или пароль.");
         }
+
     }
 }
