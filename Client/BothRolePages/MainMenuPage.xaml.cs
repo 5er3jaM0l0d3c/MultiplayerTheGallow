@@ -32,13 +32,19 @@ namespace Client.BothRolePages
         public MainMenuPage()
         {
             InitializeComponent();
-            Manager.LowerArea.LoginTBK.Text = Manager.Player.Login;
         }
 
         HttpClient client = new();
+        bool IsCancelSearchGame = false;
+        public void CancelSearchGame()
+        {
+            BTNDestroy.IsEnabled = true;
+            BTNMake.IsEnabled = true;
+            Manager.LowerArea.LoginSPN.Visibility = Visibility.Visible;
+            Manager.LowerArea.CancelGameSPN.Visibility = Visibility.Hidden;
+            IsCancelSearchGame = true;
+        }
 
-
-            
 
         private  void BTN_DestroySecret(object sender, RoutedEventArgs e)
         {
@@ -50,21 +56,31 @@ namespace Client.BothRolePages
             timer.Start();
             Manager.LowerArea.LoadingTBK.Text = "Поиск свободной комнаты...";
             Manager.LowerArea.LoadingSPN.Visibility = Visibility.Visible;
+
+            BTNDestroy.IsEnabled = false;
+            BTNMake.IsEnabled = false;
+
+            Manager.LowerArea.CancelBTN.IsEnabled = true;
+            Manager.LowerArea.LoginSPN.Visibility = Visibility.Hidden;
+            Manager.LowerArea.CancelGameSPN.Visibility = Visibility.Visible;
         }
 
         private async void CheckGames(object sender, EventArgs e)
         {
 
-           
+            if (IsCancelSearchGame)
+                (sender as DispatcherTimer).Stop();
             try
             {
                 var response = await client.GetAsync("http://localhost:5279/api/Game/ConnectDestroyer?DestroyerId=" + Manager.Player.Id);
                 var result = await response.Content.ReadAsAsync<int>();
                 if (result != 0)
                 {
+                    
                     Manager.GameId = result;
                     (sender as DispatcherTimer).Tick -=CheckGames;
                     (sender as DispatcherTimer).Tick +=IsGameSetted;
+                    Manager.LowerArea.CancelBTN.IsEnabled = false;
                     Manager.LowerArea.LoadingTBK.Text = "Ожидание оппонента...";
                 }
             }

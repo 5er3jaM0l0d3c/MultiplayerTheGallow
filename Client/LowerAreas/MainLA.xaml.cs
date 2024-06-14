@@ -31,10 +31,21 @@ namespace Client.LowerAreas
     { 
 
         HttpClient client = new();
-        public MainLA()
+
+        public MainMenuPage MainMenuPage;
+        public MainLA(MainMenuPage MainMenuPage)
         {
+            this.MainMenuPage = MainMenuPage;
             InitializeComponent();
-            
+            LoginTBK.Text = Manager.Player.Login;
+
+        }
+
+        private void CancelSearchGameBTNClick(object sender, RoutedEventArgs e)
+        {
+          LoadingSPN.Visibility = Visibility.Hidden;
+
+            MainMenuPage.CancelSearchGame();
         }
     }
 }

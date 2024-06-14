@@ -1,4 +1,5 @@
-﻿using Client.StructuresAndOther;
+﻿using Client.LowerAreas;
+using Client.StructuresAndOther;
 using Entities;
 using Newtonsoft.Json;
 using System;
@@ -74,7 +75,10 @@ namespace Client.BothRolePages
                     {
                         response = await client.GetAsync("http://localhost:5279/api/Player/GetPlayerLP?login=" + player.Login + "&password=" + player.Password);
                         Manager.Player = await response.Content.ReadAsAsync<Player>();
-                        Manager.MainAreaFrame.Navigate(new MainMenuPage());
+                        var page = new MainMenuPage();
+                        Manager.LowerArea = new MainLA(page);
+                        Manager.LowerAreaFrame.Navigate(Manager.LowerArea);
+                        Manager.MainAreaFrame.Navigate(page);
                     }
                 }
                 RegistrationBTN.IsEnabled = true;

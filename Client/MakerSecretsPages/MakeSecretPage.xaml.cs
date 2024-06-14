@@ -87,6 +87,9 @@ namespace Client.MakerSecretsPages
                     Interval = TimeSpan.FromMilliseconds(500),
                 };
 
+                Manager.LowerArea.LoadingTBK.Text = "Поиск оппонента...";
+                Manager.LowerArea.LoadingSPN.Visibility = Visibility.Visible;
+
                 timer.Tick += CheckDestroyerConnection;
 
                 timer.Start();
@@ -103,6 +106,7 @@ namespace Client.MakerSecretsPages
                 {
                     //показать что этот гений нашелся и подключился
                     (sender as DispatcherTimer).Stop();
+                    Manager.LowerArea.LoadingSPN.Visibility = Visibility.Hidden;
                     Manager.MainAreaFrame.Navigate(new MakerMainPage());
                 }
             }

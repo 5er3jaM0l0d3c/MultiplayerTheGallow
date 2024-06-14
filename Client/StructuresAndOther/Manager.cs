@@ -1,4 +1,5 @@
-﻿using Client.LowerAreas;
+﻿using Client.BothRolePages;
+using Client.LowerAreas;
 using Entities;
 using System;
 using System.Collections.Generic;
@@ -18,5 +19,6 @@ namespace Client.StructuresAndOther
         public static int GameId { get; set; }
 
         public static MainLA LowerArea;
+        
     }
 }

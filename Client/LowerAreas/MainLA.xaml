@@ -9,7 +9,10 @@
       Title="MainLA">
 
     <Grid Background="White">
-        <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Left" VerticalAlignment="Center">
+        <StackPanel Visibility="Hidden" Name="CancelGameSPN" Orientation="Horizontal" Margin="10,10,10,10" HorizontalAlignment="Left" VerticalAlignment="Center">
+            <Button Width="100" Name="CancelBTN" Height="30" Content="Отмена" Click="CancelSearchGameBTNClick"/>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Name="LoginSPN" Margin="10" HorizontalAlignment="Left" VerticalAlignment="Center">
             <TextBlock Name="LoginTBK"/>
         </StackPanel>
         <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Right" VerticalAlignment="Center" Name="LoadingSPN" Visibility="Hidden">

@@ -1,4 +1,5 @@
-﻿using Client.StructuresAndOther;
+﻿using Client.LowerAreas;
+using Client.StructuresAndOther;
 using Entities;
 using System;
 using System.Collections.Generic;
@@ -45,8 +46,10 @@ namespace Client.BothRolePages
                     ErrorTBX.Visibility = Visibility.Visible; return;
                 }
                 Manager.Player = await response.Content.ReadAsAsync<Player>();
-               
-                Manager.MainAreaFrame.Navigate(new MainMenuPage());
+                var page = new MainMenuPage();
+                Manager.LowerArea = new MainLA(page);
+                Manager.LowerAreaFrame.Navigate(Manager.LowerArea);
+                Manager.MainAreaFrame.Navigate(page);
             }
             catch
             {
