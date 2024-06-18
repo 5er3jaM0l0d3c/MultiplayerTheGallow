@@ -75,10 +75,18 @@ namespace Client.MakerSecretsPages
                 SPN.Children.Insert(1, slider);
                 SPN.Children.Remove(TBXSecretWord);
                 btn.Tag = "";
+                InfinityMistakes.Visibility = Visibility.Visible;
                 return;
             }
             else
             {
+                   
+                if((bool)AllowAnyNumOfMistakes.IsChecked)
+                {
+                    numOfMistakes = -2;
+                }
+                else
+
                 numOfMistakes = Convert.ToInt32(lbl.Content);
                 await client.GetAsync("http://localhost:5279/api/Game/SetGame?gameid=" + Manager.GameId + "&word=" + word + "&numOfMistakes=" + numOfMistakes);
 

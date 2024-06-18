@@ -16,7 +16,7 @@
             
             </StackPanel>
             <TextBlock HorizontalAlignment="Left" Text="Последняя использованная буква:" FontSize="20" Margin="5"/>
-            <Label Content="#" FontSize="30" Name="LBLLastLetter" Margin="5"/>
+            <Label Content="" FontSize="30" Name="LBLLastLetter" Margin="5"/>
             <StackPanel Orientation="Horizontal" Name="SPNMistakes">
                 <TextBlock Text="Ошибок осталось:" FontSize="20" Margin="5"/>
                 <Label Name="LBLNumOfMistakes" FontSize="20" Margin="5"/>
