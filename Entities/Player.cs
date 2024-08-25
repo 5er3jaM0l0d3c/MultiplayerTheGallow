@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
+﻿
 namespace Entities;
 
 public partial class Player
@@ -35,4 +33,12 @@ public partial class Player
 
     public bool IsPlaying { get; set; }
 
+}
+
+public partial class Player
+{
+    public int? NumOfGames;
+    public float? DestroyerWinningPercentage;
+    public float? MakerWinningPercentage;
+    public float? DestroyerPlayingPesrcentage;
 }

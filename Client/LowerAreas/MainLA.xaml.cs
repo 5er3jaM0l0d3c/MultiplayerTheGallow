@@ -47,5 +47,11 @@ namespace Client.LowerAreas
 
             MainMenuPage.CancelSearchGame();
         }
+
+        private void PlayerStatsBTNClick(object sender, RoutedEventArgs e)
+        {
+            Manager.MainAreaFrame.Navigate(new PlayerStatsPage());
+            Manager.LowerAreaFrame.Navigate(new BackLowerAreaPage());
+        }
     }
 }
