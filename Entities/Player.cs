@@ -1,20 +1,18 @@
-﻿
+﻿using System;
+using System.Collections.Generic;
+
 namespace Entities;
 
 public partial class Player
 {
+    private string text;
 
-    public Player(string Login, string Password)
+    public Player(string login, string password)
     {
-        this.Login = Login;
-        this.Password = Password;
-        MakerPlayTimes = 0;
-        DestroyerPlayTimes = 0;
-        MakerPlayWinningTimes = 0;
-        DestroyerPlayWinningTimes = 0;
-        IsOnline = true;
-        IsPlaying = false;
+        Login = login;
+        Password = password;
     }
+
     public int Id { get; set; }
 
     public string Login { get; set; } = null!;
@@ -33,12 +31,4 @@ public partial class Player
 
     public bool IsPlaying { get; set; }
 
-}
-
-public partial class Player
-{
-    public int? NumOfGames;
-    public float? DestroyerWinningPercentage;
-    public float? MakerWinningPercentage;
-    public float? DestroyerPlayingPesrcentage;
 }

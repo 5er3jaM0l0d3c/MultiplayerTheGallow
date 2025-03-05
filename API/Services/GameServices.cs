@@ -2,6 +2,7 @@
 using Entities;
 using Microsoft.EntityFrameworkCore;
 
+
 namespace API.Services
 {
     public class GameServices : IGame
@@ -21,14 +22,14 @@ namespace API.Services
             game.MakerId = MakerId;
             context.Add(game);
             context.SaveChanges();
-            var games = context.Games.ToList();
+            var games = context.Game.ToList();
             games.Reverse();
             return games.FirstOrDefault(x => x.MakerId == MakerId).Id;
         }
 
         public void DeleteGame(int id)
         {
-            var game = context.Games.FirstOrDefault(x => x.Id == id);
+            var game = context.Game.FirstOrDefault(x => x.Id == id);
             try 
             {
                 context.Remove(game);
@@ -42,12 +43,12 @@ namespace API.Services
 
         public Game GetGame(int id)
         {
-            return context.Games.Include(x => x.Destroyer).Include(x => x.Maker).FirstOrDefault(x => x.Id == id) ?? throw new Exception("Данной игровой сессии не существует.");
+            return context.Game.Include(x => x.Destroyer).Include(x => x.Maker).FirstOrDefault(x => x.Id == id) ?? throw new Exception("Данной игровой сессии не существует.");
         }
 
         public List<Game> GetGames()
         {
-            return context.Games.Include(x => x.Destroyer).Include(x => x.Maker).ToList();
+            return context.Game.Include(x => x.Destroyer).Include(x => x.Maker).ToList();
         }
 
         public void UpdateGame(Game game)
@@ -69,7 +70,7 @@ namespace API.Services
             var game = GetGame(gameId);
             game.Word = word.ToLower().Replace(" ", "");
             game.MistakesNum = numOfMistakes;
-            context.Games.Update(game);
+            context.Game.Update(game);
             context.SaveChanges();
         }
         /// <summary>
@@ -84,12 +85,12 @@ namespace API.Services
         {  
             if (GameId == -1)
             {
-                var game = context.Games.Include(x => x.Maker).Include(x => x.Destroyer).FirstOrDefault(x => x.DestroyerId == null);
+                var game = context.Game.Include(x => x.Maker).Include(x => x.Destroyer).FirstOrDefault(x => x.DestroyerId == null);
                 if(game != null)
                 {
                     game.DestroyerId = DestroyerId;
-                    game.Destroyer = context.Players.FirstOrDefault(x => x.Id == DestroyerId);
-                    context.Games.Update(game);
+                    game.Destroyer = context.Player.FirstOrDefault(x => x.Id == DestroyerId);
+                    context.Game.Update(game);
                     context.SaveChanges();
                     return game.Id;
                 }
@@ -141,7 +142,7 @@ namespace API.Services
                 var trueLetter = new TrueLetter();
                 trueLetter.Letter = Letter;
                 trueLetter.GameId = GameId;
-                context.TrueLetters.Add(trueLetter);
+                context.TrueLetter.Add(trueLetter);
                 context.SaveChanges();
                 return true;
             }

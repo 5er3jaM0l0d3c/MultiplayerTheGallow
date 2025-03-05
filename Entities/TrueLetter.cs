@@ -1,17 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Entities
+namespace Entities;
+
+public partial class TrueLetter
 {
-    public class TrueLetter
-    {
-        public int Id { get; set; }
-        public int? GameId { get; set; }
-        public string? Letter { get; set; }
-        public virtual Game? Game { get; set; }
+    public int Id { get; set; }
 
-    }
+    public int GameId { get; set; }
+
+    public string Letter { get; set; } = null!;
+
+    public virtual Game Game { get; set; } = null!;
 }

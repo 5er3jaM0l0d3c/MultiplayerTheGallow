@@ -14,36 +14,36 @@ namespace API.Services
 
         public List<Player> GetPlayers()
         {
-            return context.Players.ToList();
+            return context.Player.ToList();
         }
 
         public Player GetPlayer(int id)
         {
-            return context.Players.FirstOrDefault(x => x.Id == id) ?? throw new Exception("Данного пользователя не существует.");
+            return context.Player.FirstOrDefault(x => x.Id == id) ?? throw new Exception("Данного пользователя не существует.");
         }
         public Player GetPlayer(string Login, string Password)
         {
-            return context.Players.FirstOrDefault(x => x.Login == Login && x.Password == Password) ?? throw new Exception("Данного пользователя не существует.");
+            return context.Player.FirstOrDefault(x => x.Login == Login && x.Password == Password) ?? throw new Exception("Данного пользователя не существует.");
         }
 
         public void AddPlayer(Player player)
         {
-            context.Players.Add(player);
+            context.Player.Add(player);
             context.SaveChanges();
         }
 
         public void UpdatePlayer(Player player)
         {
-            context.Players.Update(player);
+            context.Player.Update(player);
             context.SaveChanges();
         }
 
         public void DeletePlayer(int id)
         {
-            var player = context.Players.FirstOrDefault(x => x.Id == id);
+            var player = context.Player.FirstOrDefault(x => x.Id == id);
             try
             {
-                context.Players.Remove(player);
+                context.Player.Remove(player);
                 context.SaveChanges();
             }
             catch 
@@ -54,7 +54,7 @@ namespace API.Services
 
         public Player AutorizePlayer(string Login, string Password)
         {
-            var player = context.Players.FirstOrDefault(x => x.Login == Login && x.Password == Password);
+            var player = context.Player.FirstOrDefault(x => x.Login == Login && x.Password == Password);
             return player ?? throw new Exception("Неправильный логин или пароль.");
         }
 

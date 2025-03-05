@@ -13,12 +13,12 @@ namespace API.Services
 
         public List<TrueLetter> GetTrueLetters(int GameId)
         {
-            return context.TrueLetters.Where(x => x.GameId == GameId).ToList();
+            return context.TrueLetter.Where(x => x.GameId == GameId).ToList();
         }
 
         public void AddTrueLetter(TrueLetter mistake)
         {
-            context.TrueLetters.Add(mistake);
+            context.TrueLetter.Add(mistake);
             context.SaveChanges();
         }
     }
