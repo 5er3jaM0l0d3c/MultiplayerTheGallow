@@ -14,7 +14,7 @@
         </StackPanel>
         <StackPanel Orientation="Horizontal" Name="LoginSPN" Margin="10" HorizontalAlignment="Left" VerticalAlignment="Center">
             <TextBlock Name="LoginTBK" Margin="0,0,10,0"/>
-            <Button Width="100" Height="30" Content="Статистика" Click="PlayerStatsBTNClick"/>
+            
         </StackPanel>
         <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Right" VerticalAlignment="Center" Name="LoadingSPN" Visibility="Hidden">
             <TextBlock Name="LoadingTBK"  VerticalAlignment="Center" Margin="0,0,10,0"/>

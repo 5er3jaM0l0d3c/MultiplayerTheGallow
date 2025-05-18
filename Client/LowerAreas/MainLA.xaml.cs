@@ -30,8 +30,6 @@ namespace Client.LowerAreas
     public partial class MainLA : Page
     { 
 
-        HttpClient client = new();
-
         public MainMenuPage MainMenuPage;
         public MainLA(MainMenuPage MainMenuPage)
         {
